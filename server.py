@@ -1,9 +1,7 @@
 
 import falcon
-import json
 import logging
 from FakeYubiHSM import FakeYubiHSM
-
 
 FORMAT = '%(asctime)-15s %(levelname)s %(funcName)s(%(lineno)d): %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
@@ -20,18 +18,15 @@ class EncryptResource:
         Args:
             req: the request object.
             resp: the response object.
-            pt: the plaintext to encrypt
         """
 
-        body = req.stream.read()
-        content = json.loads(body.decode('utf-8'))
-        pt = content['plaintext']
+        pt = req.stream.read()
         LOG.debug("plaintext: %s" % pt)
 
         ct = self.encrypt(pt)
         LOG.debug("ciphertext: %s" % ct)
 
-        resp.body = json.dumps(dict(ciphertext=ct))
+        resp.body = ct
 
     def encrypt(self, pt):
         """
@@ -51,22 +46,19 @@ class DecryptResource:
         Args:
             req: the request object.
             resp: the response object.
-            ct: the ciphertext to decrypt
         """
 
-        body = req.stream.read()
-        content = json.loads(body.decode('utf-8'))
-        ct = content['ciphertext']
+        ct = req.stream.read()
         LOG.debug("ciphertext: %s" % ct)
 
         pt = self.decrypt(ct)
         LOG.debug("plaintext: %s" % pt)
 
-        resp.body = json.dumps(dict(plaintext=pt))
+        resp.body = pt
 
     def decrypt(self, ct):
         """
-        This method will "decrypt" the provided plaintext value.
+        This method will "decrypt" the provided ciphertext value.
         """
         hsm = FakeYubiHSM()
         return hsm.encrypt(ct)
