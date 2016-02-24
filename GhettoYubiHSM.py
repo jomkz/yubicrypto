@@ -31,21 +31,20 @@ class GhettoYubiHSM(object):
         salt, key = self._get_key()
 
         cipher = AES.new(key)
-        encoded_data = base64.b64encode(cipher.encrypt(self._pad(s)))
-        encoded_salt = base64.b64encode(salt)
+        encrypted_data = cipher.encrypt(self._pad(s))
 
-        return '%s%s' % (encoded_salt, encoded_data)
+        return base64.b64encode('%s%s' % (salt, encrypted_data))
 
     def decrypt(self, s):
         try:
-            encoded_salt = s[:24]
-            encoded_data = s[24:]
-            salt = base64.b64decode(encoded_salt)
+            decoded_string = base64.b64decode(s)
+            salt = decoded_string[:self.BLOCK_SIZE]
+            data = decoded_string[self.BLOCK_SIZE:]
 
             salt, key = self._get_key(salt)
 
             cipher = AES.new(key)
-            decoded_data = cipher.decrypt(base64.b64decode(encoded_data)).rstrip(self.PADDING)
+            decoded_data = cipher.decrypt(data).rstrip(self.PADDING)
 
             return decoded_data
         except:
