@@ -1,4 +1,4 @@
 falcon
 gunicorn
-yubico
+python-yubico
 pycrypto
