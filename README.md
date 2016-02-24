@@ -24,7 +24,10 @@ Once the dependencies have been installed, start the development server.
 
     $ gunicorn server:app
 
-This will start the development server on the local machine, listening on port 8000. You should be able to access the application at [http://localhost:8000/](http://localhost:8000).
+This will start the development server on the local machine, listening on port 8000. You should be able to access the application at [http://localhost:8000/](http://localhost:8000).  To listen on a non-localhost interface, use something like this:
+
+    $ gunicorn -b 192.168.0.2:80 server:app
+
 
 ## Usage
 

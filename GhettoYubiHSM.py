@@ -6,7 +6,7 @@ from Crypto.Cipher import AES
 import yubico
 
 
-class FakeYubiHSM(object):
+class GhettoYubiHSM(object):
     # the block size for the cipher object; must be 16 per FIPS-197
     BLOCK_SIZE = 16
     PADDING = b'\x00'
