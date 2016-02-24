@@ -2,6 +2,8 @@
 import falcon
 import json
 import logging
+from FakeYubiHSM import FakeYubiHSM
+
 
 FORMAT = '%(asctime)-15s %(levelname)s %(funcName)s(%(lineno)d): %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
@@ -35,7 +37,8 @@ class EncryptResource:
         """
         This method will "encrypt" the provided plaintext value.
         """
-        return pt[::-1]
+        hsm = FakeYubiHSM()
+        return hsm.encrypt(pt)
 
 class DecryptResource:
     """
@@ -65,7 +68,8 @@ class DecryptResource:
         """
         This method will "decrypt" the provided plaintext value.
         """
-        return ct[::-1]
+        hsm = FakeYubiHSM()
+        return hsm.encrypt(ct)
 
 
 app = falcon.API()

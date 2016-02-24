@@ -1,2 +1,4 @@
 falcon
 gunicorn
+yubico
+pycrypto
